@@ -13,9 +13,9 @@ public:
 
   string name;
 
-  City(string name)
+  City(string city_name)
   {
-    this->name = name;
+    name = city_name;
   }
 };
 
@@ -39,7 +39,7 @@ public:
 
 void backtracking(City* city)
 {
-  //cout<<city->name<<endl;
+  cout<<city->name<<endl;
   for(int i=0;i<city->relationships.size();i++)
     backtracking(city->relationships[i]->to);
 }
@@ -84,12 +84,12 @@ public:
 
   City* SearchCity(City* current_city, string city_name)
   {
+    if (current_city->name == city_name) {
+      return current_city;
+    }
+
     for(int i=0;i<current_city->relationships.size();i++)
     {
-      if (current_city->name == city_name) {
-        return current_city;
-      }
-
       return SearchCity(current_city->relationships[i]->to, city_name);
     }
 
@@ -103,7 +103,7 @@ public:
 
 };
 
-void CreateCity(Map map){
+void CreateCity(Map &map){
 
   while (true) {
     string new_city_name, existing_city_name;
@@ -116,6 +116,7 @@ void CreateCity(Map map){
       cin >> new_city_name;
       map.AddCity(new_city_name);
       cout << endl;
+
       cout << "¡La ciudad principal fue agregada!" << endl;
     }
     else
@@ -133,6 +134,7 @@ void CreateCity(Map map){
 
         if (existing_city == NULL) {
           cout << "No se encontró la ciudad, por favor ingresela nuevamente:" << '\n';
+          //std::cout << map.start_city->name << '\n';
         }
 
       } while(existing_city == NULL);
@@ -151,29 +153,82 @@ void CreateCity(Map map){
       break;
     }
   }
+}
 
+void CalculateDistanceOption(Map &map) {
+  string origin_city_name, destination_city_name;
+
+  City* origin_city = NULL;
+  City* destination_city = NULL;
+  int km_distance = 0;
+
+  // do {
+  //   cout << "Ingrese la ciudad de origen:" << endl;
+  //   cin >> origin_city_name;
+  //   cout << endl;
+  //
+  //   origin_city = map.SearchCity(origin_city_name);
+  //
+  //   if (origin_city == NULL) {
+  //     cout << "No se encontró la ciudad de origen, por favor ingresela nuevamente:" << endl;
+  //   }
+  //
+  // } while(origin_city == NULL);
+
+  // do {
+  //   cout << "Ingrese la ciudad de destino:" << endl;
+  //   cin >> destination_city_name;
+  //   cout << endl;
+  //
+  //   destination_city = map.SearchCity(destination_city_name);
+  //
+  //   if (destination_city == NULL) {
+  //     cout << "No se encontró la ciudad de destino, por favor ingresela nuevamente:" << endl;
+  //   }
+  //
+  // } while(destination_city == NULL);
+
+  cout << "Ingrese la ciudad de destino:" << endl;
+  cin >> destination_city_name;
+  cout << endl;
+
+  destination_city = map.SearchCity(destination_city_name);
+
+  km_distance = CalculateDistance(map.start_city, destination_city_name);
+  cout << endl << endl;
+  cout << "La distancia entre " << map.start_city->name << " y " << destination_city_name << endl;
+  cout << "es de " << km_distance << " kilometros" << endl;
 
 }
 
 int main()
 {
+  Map map;
+
   while (true) {
     int option;
     char answer;
-    Map map;
 
     cout << "*****************************************" << endl;
     cout << "* 1) Agregar cuidad                     *" << endl;
     cout << "* 2) Calcular distancia entre ciuidades *" << endl;
+    cout << "* 3) Listar ciudades                    *" << endl;
     cout << "*****************************************" << endl;
     cout << endl;
 
     cout << "Ingrese una opción:" << endl;
     cin >> option;
+    cout << endl;
 
     switch (option) {
       case 1:
         CreateCity(map);
+        break;
+      case 2:
+        CalculateDistanceOption(map);
+        break;
+      case 3:
+        backtracking(map.start_city);
         break;
     }
 
