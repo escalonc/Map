@@ -107,27 +107,48 @@ void CreateCity(Map map){
 
   while (true) {
     string new_city_name, existing_city_name;
-    City* existing_city;
+    City* existing_city = NULL;
     int km;
+    char restart;
 
     if (map.start_city == NULL) {
       cout << "La lista se encuentra vacía, ingrese el nombre para la ciudad principal:" << endl;
       cin >> new_city_name;
       map.AddCity(new_city_name);
       cout << endl;
-      cout << "¡La ciudad principal fue creada!" << endl;
+      cout << "¡La ciudad principal fue agregada!" << endl;
     }
     else
     {
       cout << "Ingrese el nombre de la ciudad:" << endl;
       cin >> new_city_name;
       cout << endl;
-      cout << "Ingrese la ciudad adyacente para formar la relación:" << endl;
-      cin >> existing_city_name;
-      cout << endl;
+
+      do {
+        cout << "Ingrese la ciudad adyacente para formar la relación:" << endl;
+        cin >> existing_city_name;
+        cout << endl;
+
+        existing_city = map.SearchCity(existing_city_name);
+
+        if (existing_city == NULL) {
+          cout << "No se encontró la ciudad, por favor ingresela nuevamente:" << '\n';
+        }
+
+      } while(existing_city == NULL);
+
       cout << "Ingrese la distancia entre las ciudades:" << endl;
       cin >> km;
 
+      map.RelateCities(existing_city, new City(new_city_name), km);
+      cout << "¡Nueva ciudad agregada!" << endl;
+    }
+
+    cout << "¿Desea agregar una nueva ciudad?, ingrese 's' o 'n' como su respuesta:" << endl;
+    cin >> restart;
+
+    if (restart != 's') {
+      break;
     }
   }
 
