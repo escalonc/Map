@@ -44,14 +44,14 @@ void backtracking(City* city)
     backtracking(city->relationships[i]->to);
 }
 
-int calculate_distance(City* city, string destino)
+int CalculateDistance(City* city, string destination)
 {
   for(int i=0;i<city->relationships.size();i++)
   {
-    if(city->relationships[i]->to->name == destino)
+    if(city->relationships[i]->to->name == destination)
       return city->relationships[i]->kilometers_distance;
 
-    int last_distance = calculate_distance(city->relationships[i]->to, destino);
+    int last_distance = CalculateDistance(city->relationships[i]->to, destination);
     if(last_distance != 999999)
       return city->relationships[i]->kilometers_distance + last_distance;
   }
@@ -59,12 +59,59 @@ int calculate_distance(City* city, string destino)
   return 999999;
 }
 
-int calculate_distance(Relationship* relationship) {
-  return calculate_distance(relationship->to, 0) + relationship->kilometers_distance;
-}
+class Map {
+private:
+
+public:
+  City* start_city;
+  Map ()
+  {
+    start_city = NULL;
+  }
+
+  void AddCity(string city_name) {
+    City* new_city = new City(city_name);
+
+    if (start_city == NULL) {
+      start_city = new_city;
+    }
+  }
+
+  void RelateCities(City* from_city, City* to_city, int km) {
+    Relationship* relation = new Relationship(from_city, to_city, km);
+    from_city->relationships.push_back(relation);
+  }
+
+  City* SearchCity(City* current_city, string city_name)
+  {
+    for(int i=0;i<current_city->relationships.size();i++)
+    {
+      if (current_city->name == city_name) {
+        return current_city;
+      }
+
+      return SearchCity(current_city->relationships[i]->to, city_name);
+    }
+
+    return NULL;
+  }
+
+  City* SearchCity(string city_name)
+  {
+    return SearchCity(start_city, city_name);
+  }
+
+};
 
 int main()
 {
+  cout << "*****************************************" << endl;
+  cout << "* 1) Agregar cuidad                     *" << endl;
+  cout << "* 2) Calcular distancia entre ciuidades *" << endl;
+  cout << "*****************************************" << endl;
+  cout << endl;
+  cout << "Ingrese una opción:" << endl;
+
   City* sps = new City("SPS");
   City* tegus = new City("Tegus");
   City* tela = new City("Tela");
@@ -83,8 +130,6 @@ int main()
   tela->relationships.push_back(tela_to_ceiba);
   ceiba->relationships.push_back(ceiba_to_tocoa);
   ceiba->relationships.push_back(ceiba_to_otro);
-
-  std::cout << calculate_distance(sps, "Ceiba") << '\n';
 
   return 0;
 }
