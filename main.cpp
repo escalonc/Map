@@ -103,33 +103,68 @@ public:
 
 };
 
+void CreateCity(Map map){
+
+  while (true) {
+    string new_city_name, existing_city_name;
+    City* existing_city;
+    int km;
+
+    if (map.start_city == NULL) {
+      cout << "La lista se encuentra vacía, ingrese el nombre para la ciudad principal:" << endl;
+      cin >> new_city_name;
+      map.AddCity(new_city_name);
+      cout << endl;
+      cout << "¡La ciudad principal fue creada!" << endl;
+    }
+    else
+    {
+      cout << "Ingrese el nombre de la ciudad:" << endl;
+      cin >> new_city_name;
+      cout << endl;
+      cout << "Ingrese la ciudad adyacente para formar la relación:" << endl;
+      cin >> existing_city_name;
+      cout << endl;
+      cout << "Ingrese la distancia entre las ciudades:" << endl;
+      cin >> km;
+
+    }
+  }
+
+
+}
+
 int main()
 {
-  cout << "*****************************************" << endl;
-  cout << "* 1) Agregar cuidad                     *" << endl;
-  cout << "* 2) Calcular distancia entre ciuidades *" << endl;
-  cout << "*****************************************" << endl;
-  cout << endl;
-  cout << "Ingrese una opción:" << endl;
+  while (true) {
+    int option;
+    char answer;
+    Map map;
 
-  City* sps = new City("SPS");
-  City* tegus = new City("Tegus");
-  City* tela = new City("Tela");
-  City* ceiba = new City("Ceiba");
-  City* tocoa = new City("Tocoa");
-  City* otro = new City("Otro pueblo");
+    cout << "*****************************************" << endl;
+    cout << "* 1) Agregar cuidad                     *" << endl;
+    cout << "* 2) Calcular distancia entre ciuidades *" << endl;
+    cout << "*****************************************" << endl;
+    cout << endl;
 
-  Relationship* sps_to_tegus = new Relationship(sps, tegus, 50);
-  Relationship* sps_to_tela = new Relationship(sps, tela, 20);
-  Relationship* tela_to_ceiba = new Relationship(tela, ceiba, 10);
-  Relationship* ceiba_to_tocoa = new Relationship(ceiba, tocoa, 60);
-  Relationship* ceiba_to_otro = new Relationship(ceiba, otro, 70);
+    cout << "Ingrese una opción:" << endl;
+    cin >> option;
 
-  sps->relationships.push_back(sps_to_tegus);
-  sps->relationships.push_back(sps_to_tela);
-  tela->relationships.push_back(tela_to_ceiba);
-  ceiba->relationships.push_back(ceiba_to_tocoa);
-  ceiba->relationships.push_back(ceiba_to_otro);
+    switch (option) {
+      case 1:
+        CreateCity(map);
+        break;
+    }
 
+    cout << endl;
+    cout << "¿Desea volver al munu principal?, ingrese 's' o 'n' como su respuesta:" << endl;
+    cin >> answer;
+
+    if (answer != 's') {
+      break;
+    }
+
+    cout << endl << endl;
+  }
   return 0;
 }
